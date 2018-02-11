@@ -32,6 +32,13 @@ void NeuralLayer::Update(float *inputs){
         neuron.Update(inputs);
     }
 }
+void NerualLayer::Randomise(float random)
+{
+    for(auto neuron : Neurons)
+    {
+        neuron.Randomise(random);
+    }
+}
 NeuralNet::NeuralNet(){
     Layers.emplace_back(NeuralLayer(4,4));
     Layers.emplace_back(NeuralLayer(4,4));
@@ -42,5 +49,13 @@ void NeuralNet::Update()
     for (int l = 1 ; l < Layers.size();++l)
     {
         Layers[l].Update(Layers[l].Output);
+    }
+}
+
+void NerualNet::Randomise(float random)
+{
+    for(auto neuron : Neurons)
+    {
+        neuron.Randomise(random);
     }
 }

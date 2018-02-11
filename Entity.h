@@ -14,4 +14,5 @@ public:
     void Intergrate();
     void Update(Entity & other);
     void UpdateAI(Entity & other);
+    void Randomise(float random);
 };

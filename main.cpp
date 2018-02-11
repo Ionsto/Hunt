@@ -1,11 +1,23 @@
 #include "World.h"
 #include <iostream>
 int MaxPlayTime = 100;
-
+void CreateGeneration(Entity & ent)
+{
+    std::vector<Entity> Generation;
+    int generationcount = 20;
+    for(int i = 0; i < generationcount;++i)
+    {
+        Generation.emplace_back(Entity(ent));
+        Generation.back().Randomise(1);
+    }
+}
 int main(int argc,char **args){
+    Entity BestEnt = Entity();
+    BestEnt.Randomise(1);
     //Generation
     for(int i = 0;i < 10;++i)
     {
+        Generation = CreateGeneration(BestEnt)
         std::cout<<i<<std::endl;
         World playenv = World();
         int runtime = 0;

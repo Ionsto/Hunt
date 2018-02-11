@@ -40,3 +40,7 @@ void Neuron::Update(float * input)
     Output = Tanh(Output);
     HiddenState = Output;
 }
+void Neuron::Randomise(float random)
+{
+    
+}

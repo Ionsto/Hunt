@@ -11,5 +11,5 @@ public:
     ~Neuron();
     void Update(float * Input);
     float Tanh(float x);
-    void Mutate(float delta = 0.5);
+    void Randomise(float delta = 0.5);
 };

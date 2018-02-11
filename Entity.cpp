@@ -25,3 +25,8 @@ void Entity::Update(Entity & other){
 void Entity::UpdateAI(Entity & other){
 
 }
+
+void Entity::Randomise(float random)
+{
+
+}
