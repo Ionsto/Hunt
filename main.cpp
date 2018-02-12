@@ -18,14 +18,17 @@ int main(int argc,char **args){
     for(int i = 0;i < 10;++i)
     {
         Generation = CreateGeneration(BestEnt)
-        std::cout<<i<<std::endl;
-        World playenv = World();
-        int runtime = 0;
-        runtime = playenv.PlayGame(MaxPlayTime);
-        std::cout<<"Ran for:"<<runtime<<std::endl;
-        if(runtime < MaxPlayTime)
+        std::cout<<"Generation number:"<<i<<std::endl;
+        for(auto entity : Generation)
         {
+            World playenv = World();
+            int runtime = 0;
+            runtime = playenv.PlayGame(MaxPlayTime);
+            std::cout<<"Ran for:"<<runtime<<std::endl;
+            if(runtime < MaxPlayTime)
+            {
 
+            }
         }
     }
 }

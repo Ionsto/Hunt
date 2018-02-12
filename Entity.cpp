@@ -1,7 +1,7 @@
 #include "Entity.h"
 #include "World.h"
 #include <iostream>
-Entity::Entity(World * world)
+Entity::Entity()
 {
     //std::cout<<"Pre-brain alocs"<<std::endl;
     brain = new NeuralNet();

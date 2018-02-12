@@ -1,7 +1,8 @@
 #include "World.h"
-World::World() : Prey(this) , Pred(this)
+World::World()
 {
-
+    Prey = std::make_unique<EntityHunter>();
+    Pred = std::make_unique<EntityHunter>();
 }
 int World::PlayGame(int timelimit){
     int t = 0;
@@ -25,6 +26,6 @@ bool World::CheckPredWin(){
 }
 
 void World::Update(){
-    Prey.Update(Pred);
-    Pred.Update(Prey);
+    Prey->Update(Pred.get());
+    Pred->Update(Prey.get());
 }

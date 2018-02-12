@@ -1,9 +1,10 @@
 #pragma once
 #include "Entity.h"
+#include <memory>
 class World{
 public:
-    Entity Prey;
-    Entity Pred;
+    std::unique_ptr<Entity> Prey;
+    std::unique_ptr<Entity> Pred;
     float WinDistance = 2;
     float WorldSize = 50;
     World();

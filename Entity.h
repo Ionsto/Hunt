@@ -4,15 +4,14 @@
 class World;
 class Entity{
 public:
-    World * worldObj;
     NeuralNet * brain;
     Vector Pos;
     Vector Vel;
     Vector Acc;
-    Entity(World * world);
+    Entity();
     ~Entity();
     void Intergrate();
-    void Update(Entity & other);
-    void UpdateAI(Entity & other);
+    void Update(World * world);
+    virtual void UpdateAI(Entity & other);
     void Randomise(float random);
 };
