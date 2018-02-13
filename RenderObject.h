@@ -3,5 +3,9 @@
 class RenderObject{
 public:
     Vector Pos;
-    virtual bool GetRayIntersection(RenderRay & ray);
+    int Colour;
+    virtual bool GetRayIntersection(RenderRay & ray)
+    {
+        return false;
+    };
 };
