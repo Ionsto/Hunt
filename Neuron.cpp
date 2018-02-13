@@ -42,5 +42,5 @@ void Neuron::Update(float * input)
 }
 void Neuron::Randomise(float random)
 {
-    
+
 }

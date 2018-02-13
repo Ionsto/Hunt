@@ -1,6 +1,6 @@
-#include "RayCamera.h"
+#include "RenderCamera.h"
 
-RayCamera::RayCamera(int samplecount)
+RenderCamera::RenderCamera(int samplecount)
 {
     SampleCount = samplecount;
     VisionData.reserve(samplecount);

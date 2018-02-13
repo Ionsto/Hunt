@@ -1,13 +1,14 @@
 #pragma once
 #include "Entity.h"
+#include "RenderCamera.h"
 class EntityAI :
     public Entity
 {
 public:
     NeuralNet * brain;
-    RayCamera * vision;
-    Entity(World * world);
-    ~Entity();
-    virtual void UpdateAI(Entity & other) override;
+    RenderCamera * vision;
+    EntityAI();
+    ~EntityAI();
+    virtual void UpdateAI(World & world) override;
     void Randomise(float random);
-}
+};

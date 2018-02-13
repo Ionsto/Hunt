@@ -3,26 +3,22 @@
 #include <iostream>
 Entity::Entity()
 {
-    //std::cout<<"Pre-brain alocs"<<std::endl;
-    brain = new NeuralNet();
-    //std::cout<<"Post-brain alocs"<<std::endl;
-    worldObj = world;
 }
-Entity::~Entity()
+void Entity::CheckBounds(World & world)
 {
-    delete brain;
+    
 }
-void Entity::Intergrate(){
+void Entity::Intergrate(World & world){
     //DT = 1
     Pos += Vel;
     Vel += Acc;
     Acc = Vector();
 }
-void Entity::Update(Entity & other){
-    Intergrate();
-    UpdateAI(other);
+void Entity::Update(World & world){
+    Intergrate(world);
+    UpdateAI(world);
 }
-void Entity::UpdateAI(Entity & other){
+void Entity::UpdateAI(World & world){
 
 }
 

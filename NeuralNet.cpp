@@ -32,7 +32,7 @@ void NeuralLayer::Update(float *inputs){
         neuron.Update(inputs);
     }
 }
-void NerualLayer::Randomise(float random)
+void NeuralLayer::Randomise(float random)
 {
     for(auto neuron : Neurons)
     {
@@ -52,10 +52,10 @@ void NeuralNet::Update()
     }
 }
 
-void NerualNet::Randomise(float random)
+void NeuralNet::Randomise(float random)
 {
-    for(auto neuron : Neurons)
+    for(auto layer : Layers)
     {
-        neuron.Randomise(random);
+        layer.Randomise(random);
     }
 }

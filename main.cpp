@@ -1,7 +1,7 @@
 #include "World.h"
 #include <iostream>
 int MaxPlayTime = 100;
-void CreateGeneration(Entity & ent)
+std::vector<Entity> CreateGeneration(Entity & ent)
 {
     std::vector<Entity> Generation;
     int generationcount = 20;
@@ -10,6 +10,7 @@ void CreateGeneration(Entity & ent)
         Generation.emplace_back(Entity(ent));
         Generation.back().Randomise(1);
     }
+    return Generation;
 }
 int main(int argc,char **args){
     Entity BestEnt = Entity();
@@ -17,7 +18,7 @@ int main(int argc,char **args){
     //Generation
     for(int i = 0;i < 10;++i)
     {
-        Generation = CreateGeneration(BestEnt)
+        auto Generation = CreateGeneration(BestEnt);
         std::cout<<"Generation number:"<<i<<std::endl;
         for(auto entity : Generation)
         {

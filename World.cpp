@@ -1,8 +1,9 @@
 #include "World.h"
+#include <memory>
 World::World()
 {
-    Prey = std::make_unique<EntityHunter>();
-    Pred = std::make_unique<EntityHunter>();
+    Prey = std::unique_ptr<EntityAI>(new EntityAI());
+    Pred = std::unique_ptr<EntityAI>(new EntityAI());
 }
 int World::PlayGame(int timelimit){
     int t = 0;
@@ -17,7 +18,7 @@ int World::PlayGame(int timelimit){
 }
 
 bool World::CheckPredWin(){
-    Vector Difference = Pred.Pos - Prey.Pos;
+    Vector Difference = Pred->Pos - Prey->Pos;
     if(Difference.Dot(Difference) < WinDistance)
     {
         return true;
@@ -26,6 +27,6 @@ bool World::CheckPredWin(){
 }
 
 void World::Update(){
-    Prey->Update(Pred.get());
-    Pred->Update(Prey.get());
+    Prey->Update(*this);
+    Pred->Update(*this);
 }

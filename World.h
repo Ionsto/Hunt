@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "EntityAI.h"
 #include <memory>
 class World{
 public:

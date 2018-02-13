@@ -1,1 +1,2 @@
-g++ *.cpp -o Hunter -std=c++11 |& tee build.txt
+echo "##################################"
+g++ *.cpp -o Hunter -std=c++17 |& tee build.txt
