@@ -1,4 +1,11 @@
 #pragma once
+struct Intersection{
+	bool Intersected;
+	float Distance;
+	int Colour;
+	Intersection(bool inter,float dist,int colour):Intersected(inter)
+	,Distance(dist),Colour(colour){};
+};
 class RenderRay{
 public:
     Vector Pos;
@@ -9,6 +16,5 @@ public:
     RenderRay(){};
     RenderRay(Vector pos,Vector dir,float max):Pos(pos),Direction(dir)
     {
-
     };
 };

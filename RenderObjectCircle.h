@@ -1,24 +1,34 @@
 #pragma once
 #include "RenderObject.h"
-
+#include <math.h>
 class RenderObjectCircle : public RenderObject{
+public:
     float RadiusSquared;
-    virtual bool GetRayIntersection(RenderRay & ray)
+    RenderObjectCircle(float rad){
+        RadiusSquared = rad*rad;
+        Colour = 1;
+    }
+    virtual Intersection GetRayIntersection(RenderRay & ray)
     {
         Vector Diff = Pos - ray.Pos;
         float DiffSqrd = Diff.Dot(Diff);
-        float ProjectedSqrd = Diff.Dot(ray.Direction * ray.MaxDistance);
-        if(ProjectedSqrd < ray.MaxDistance * ray.MaxDistance)
+        float Projected = Diff.Dot(ray.Direction);
+        float ProjectedSqrd = Projected*Projected;
+        if(ProjectedSqrd < (ray.MaxDistance * ray.MaxDistance) + RadiusSquared)
         {
             //H^2 = O^2 + A^2
-            float RadialDistanceSqrd = DiffSqrd - (ray.MaxDistance*ray.MaxDistance)
-            if(RadialDistanceSqrd < RadiusSquared)
+            float RadialDistanceSqrd = DiffSqrd - ProjectedSqrd;
+            if(RadialDistanceSqrd <= RadiusSquared)
             {
-                ray.Distance = sqrtf(ProjectedSqrd);
-                ray.Colour = Colour;
-                return true;
-            }
+				//Intersection
+				float lengthdelta = sqrtf(RadiusSquared - RadialDistanceSqrd);
+				float truedistance = sqrtf(ProjectedSqrd) - lengthdelta;
+				if(truedistance < ray.MaxDistance)
+				{
+					return Intersection(true,truedistance,Colour);
+				}
+			}
         }
-        return false;
-    } override;
+        return Intersection(false,0,0);
+    };
 };

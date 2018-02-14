@@ -15,6 +15,10 @@ public:
     {
         return Vector(X + vec.X,Y + vec.Y);
     }
+    Vector operator*(const float val)
+    {
+        return Vector(X * val,Y * val);
+    }
     Vector operator+=(const Vector & vec)
     {
         X += vec.X;

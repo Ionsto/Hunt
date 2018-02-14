@@ -2,6 +2,7 @@
 
 EntityAI::EntityAI()
 {
+    object = new RenderObjectCircle(1);
 
 }
 EntityAI::~EntityAI()
