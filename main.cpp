@@ -47,7 +47,6 @@ void OutputData(RenderCamera * camera, std::ofstream & out)
 }
 void RaytraceTesting()
 {
-    std::ofstream outfile("renderdata.txt");
     RenderScene scene = RenderScene();
     RenderCamera * camera = new RenderCamera(1000);
     
@@ -59,16 +58,29 @@ void RaytraceTesting()
     circle->Pos.X = 5;
     circle->Pos.Y = -1;
     scene.ObjectList.push_back(circle);
+	
+	RenderObject * redcircle = new RenderObjectCircle(0.2);
+	redcircle->Colour = 2;
+    redcircle->Pos.X = -3;
+    redcircle->Pos.Y = 0;
+    scene.ObjectList.push_back(redcircle);
     
     //RenderObject * circle = new RenderObjectCircle(1);
     //circle->Pos.X = 6;
     //scene.ObjectList.push_back(circle);
     
     scene.CameraList.push_back(camera);
-    scene.Render();
-	OutputData(camera,outfile);
-    outfile.close();
+    for(int i = 0; i < 36;++i)
+    {
+		std::ofstream outfile("./Render/data"+std::to_string(i)+".txt");
+		scene.Render();
+		OutputData(camera,outfile);
+		camera->Angle += 3.14*(10.0/180.0);
+		outfile.close();
+	}
     delete circle;
+    delete redcircle;
+    delete bigcircle;
     delete camera;
 }
 int main(int argc,char **args){

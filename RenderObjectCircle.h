@@ -14,7 +14,7 @@ public:
         float DiffSqrd = Diff.Dot(Diff);
         float Projected = Diff.Dot(ray.Direction);
         float ProjectedSqrd = Projected*Projected;
-        if(ProjectedSqrd < (ray.MaxDistance * ray.MaxDistance) + RadiusSquared)
+        if(Projected > 0 && ProjectedSqrd < (ray.MaxDistance * ray.MaxDistance) + RadiusSquared)
         {
             //H^2 = O^2 + A^2
             float RadialDistanceSqrd = DiffSqrd - ProjectedSqrd;
