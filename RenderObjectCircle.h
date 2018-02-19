@@ -23,7 +23,7 @@ public:
 				//Intersection
 				float lengthdelta = sqrtf(RadiusSquared - RadialDistanceSqrd);
 				float truedistance = sqrtf(ProjectedSqrd) - lengthdelta;
-				if(truedistance < ray.MaxDistance)
+				if(truedistance <= ray.MaxDistance)
 				{
 					return Intersection(true,truedistance,Colour);
 				}

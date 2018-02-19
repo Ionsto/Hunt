@@ -7,6 +7,12 @@ public:
     Vector Pos;
     Vector Vel;
     Vector Acc;
+	float MaxAcceleration;
+    float Rot;
+    float RotVel;
+    float RotAcc;
+    float LinearFriction;
+    float LinearFrictionRot;
     Entity();
     void Intergrate(World & world);
     void CheckBounds(World & world);

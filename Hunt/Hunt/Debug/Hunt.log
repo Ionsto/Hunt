@@ -1,0 +1,10 @@
+﻿  main.cpp
+d:\github\hunt\rendercamera.h(11): warning C4305: 'initializing': truncation from 'double' to 'float'
+d:\github\hunt\renderobjectline.h(23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\renderobjectline.h(24): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\main.cpp(150): warning C4305: 'argument': truncation from 'double' to 'float'
+d:\github\hunt\main.cpp(155): warning C4305: 'argument': truncation from 'double' to 'float'
+d:\github\hunt\main.cpp(171): warning C4305: '+=': truncation from 'double' to 'float'
+d:\github\hunt\main.cpp(204): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\github\hunt\main.cpp(216): warning C4305: '+=': truncation from 'double' to 'float'
+  Hunt.vcxproj -> D:\Github\Hunt\Hunt\Debug\Hunt.exe

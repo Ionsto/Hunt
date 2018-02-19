@@ -5,7 +5,7 @@ RenderScene::RenderScene()
 }
 void RenderScene::Render()
 {
-    for(auto cam : CameraList)
+    for(auto&& cam : CameraList)
     {
         RenderSingleCamera(cam);
     }
@@ -20,37 +20,40 @@ void RenderScene::RenderSingleCamera(RenderCamera * camera)
         float RayAngle = camera->Angle + SampleSlice*(i-HalfSampleCount);
         Vector Direction = Vector(cosf(RayAngle),sinf(RayAngle));
         RenderRay ray = RenderRay(camera->Pos,Direction,camera->MaxDistance);
-        RenderSingleRay(ray);
+        RenderSingleRay(ray,camera->Exclude);
         camera->VisionData[i] = ray;
     }
 }
 
-void RenderScene::RenderSingleRay(RenderRay & ray)
+void RenderScene::RenderSingleRay(RenderRay & ray,RenderObject * exclude)
 {
 	Intersection ClosestIntersection = Intersection(false,0,0);
-	for(auto Object : ObjectList)
+	for(RenderObject * Object : ObjectList)
 	{
-		Intersection NewIntersection = Object->GetRayIntersection(ray);
-		if(NewIntersection.Intersected)
+		if(Object != exclude)
 		{
-			if(!ClosestIntersection.Intersected)
+			Intersection NewIntersection = Object->GetRayIntersection(ray);
+			if(NewIntersection.Intersected)
 			{
-				ClosestIntersection = NewIntersection;
-			}
-			else if(NewIntersection.Distance < ClosestIntersection.Distance)
-			{
-				ClosestIntersection = NewIntersection;
+				if(!ClosestIntersection.Intersected)
+				{
+					ClosestIntersection = NewIntersection;
+				}
+				else if(NewIntersection.Distance < ClosestIntersection.Distance)
+				{
+					ClosestIntersection = NewIntersection;
+				}
 			}
 		}
-	}
-	if(ClosestIntersection.Intersected)
-	{
-		ray.Distance = ClosestIntersection.Distance;
-		ray.Colour = ClosestIntersection.Colour;
-	}
-	else
-	{
-		ray.Distance = ray.MaxDistance;
-		ray.Colour = 0;
+		if(ClosestIntersection.Intersected)
+		{
+			ray.Distance = ClosestIntersection.Distance;
+			ray.Colour = ClosestIntersection.Colour;
+		}
+		else
+		{
+			ray.Distance = ray.MaxDistance;
+			ray.Colour = 0;
+		}
 	}
 }

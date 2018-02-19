@@ -19,9 +19,14 @@ public:
     {
         return Vector(X * val,Y * val);
     }
-    Vector operator+=(const Vector & vec)
+    void operator+=(const Vector & vec)
     {
         X += vec.X;
         Y += vec.Y;
+    }
+    void operator*=(const float val)
+    {
+        X *= val;
+        Y *= val;
     }
 };

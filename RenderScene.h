@@ -9,5 +9,5 @@ public:
     RenderScene();
     void Render();
     void RenderSingleCamera(RenderCamera * camera);
-    void RenderSingleRay(RenderRay & ray);
+    void RenderSingleRay(RenderRay & ray,RenderObject * exclude);
 };

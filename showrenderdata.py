@@ -10,11 +10,11 @@ def GetData(name="renderdata.txt"):
 	data = []
 	for line in datafile:
 		data.append(list(map(float,line.split(" "))))
-		print(line)
+		#print(line)
 	datafile.close()
 	return data
-ImageSize = (1920/4,1080/4)
-maxdistance=10
+ImageSize = (int(1920/2),int(1080/2))
+maxdistance=20
 def GetColourFromRay(ray):
 	raycolour = int(ray[1])
 	raydistance = ray[0]
