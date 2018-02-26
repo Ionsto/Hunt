@@ -11,9 +11,8 @@ class EntityAI :
     public Entity
 {
 private:
-	Colour ColourMapping[5] = {Colour(255,255,255),Colour(0,0,0),Colour(255,0,0),Colour(0,255,0),Colour(0,0,255)};
+	Colour ColourMapping[5] = {Colour(1,1,1),Colour(0,0,0),Colour(1,0,0),Colour(0,1,0),Colour(0,0,1) };
 public:
-	
     NeuralNet * brain;
     RenderCamera * vision;
     RenderObject * object;

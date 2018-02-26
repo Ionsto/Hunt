@@ -118,8 +118,11 @@
     <ClCompile Include="..\..\Entity.cpp" />
     <ClCompile Include="..\..\EntityAI.cpp" />
     <ClCompile Include="..\..\main.cpp" />
+    <ClCompile Include="..\..\NeuralLayer.cpp" />
+    <ClCompile Include="..\..\NeuralLayerConv.cpp" />
     <ClCompile Include="..\..\NeuralNet.cpp" />
     <ClCompile Include="..\..\Neuron.cpp" />
+    <ClCompile Include="..\..\NeuronLSTM.cpp" />
     <ClCompile Include="..\..\RenderCamera.cpp" />
     <ClCompile Include="..\..\RenderScene.cpp" />
     <ClCompile Include="..\..\World.cpp" />
@@ -127,8 +130,12 @@
   <ItemGroup>
     <ClInclude Include="..\..\Entity.h" />
     <ClInclude Include="..\..\EntityAI.h" />
+    <ClInclude Include="..\..\NeuralBrain.h" />
+    <ClInclude Include="..\..\NeuralLayer.h" />
+    <ClInclude Include="..\..\NeuralLayerConv.h" />
     <ClInclude Include="..\..\NeuralNet.h" />
     <ClInclude Include="..\..\Neuron.h" />
+    <ClInclude Include="..\..\NeuronLSTM.h" />
     <ClInclude Include="..\..\RenderCamera.h" />
     <ClInclude Include="..\..\RenderObject.h" />
     <ClInclude Include="..\..\RenderObjectCircle.h" />

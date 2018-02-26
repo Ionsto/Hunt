@@ -1,5 +1,4 @@
 #include "Neuron.h"
-#include "math.h"
 #include <cstring>
 #include <cstdlib>
 #include <iostream>
@@ -26,24 +25,30 @@ Neuron::Neuron(Neuron const& ner)
     Bias = ner.Bias;
     std::memcpy(Weights,ner.Weights,sizeof(float)*(InputSize+1));
 }
-float Neuron::Tanh(float x)
-{
-    return x/(1.0+fabs(x));
-}
 void Neuron::Update(float * input)
 {
     Output = Bias;
     //std::cout<<"Output"<<Output<<"\n";
     //std::cout<<"Bias"<<Bias<<"\n";
-    Output += HiddenState * Weights[0];
-    //#pragma omp parallel reduce SIMD
-    for(int i = 1;i < InputSize;++i)
+	float sum = 0;
+    #pragma omp simd reduction(+:sum)
+    for(int i = 0;i < InputSize;++i)
     {
-        Output += input[i] * Weights[i];
+		sum += input[i] * Weights[i];
     }
+	Output += sum;
+    Output += HiddenState * Weights[InputSize];
     //std::cout<<"Output:"<<Output<<"\n";
-    Output = Tanh(Output);
-    HiddenState = Output;
+	switch (ActivationFunction)
+	{
+	case 0:
+		Output = Tanh(Output);
+		break;
+	case 1:
+		Output = Relu(Output);
+		break;
+	}
+	HiddenState = Output;
     //std::cout<<"Output"<<Output<<"\n";
 }
 void Neuron::Randomise(float random)

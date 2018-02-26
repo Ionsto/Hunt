@@ -28,7 +28,7 @@ for filename in filelist:
 	rendered = Image.new('RGBA', ImageSize, (255,255,255,255))
 	d = ImageDraw.Draw(rendered)
 	scanx = 0
-	deltascan = ImageSize[0]/float(len(data)+1)
+	deltascan = ImageSize[0]/float(len(data))
 	maxheight = ImageSize[1]/2.0
 	for ray in data:
 		height = maxheight * (ray[0]-maxdistance)/maxdistance

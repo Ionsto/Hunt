@@ -11,6 +11,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <stdio.h>
+#include "NeuralBrain.h"
 //#include <dirent.h>
 
 int MaxPlayTime = 100;
@@ -21,13 +22,37 @@ public:
     int games = 0;
     PlayData(NeuralNet * newbrain){
 		brain = std::unique_ptr<NeuralNet>(newbrain);
+		wins = 0;
+		games = 0;
 	};
-    PlayData(PlayData const& play)
+	PlayData(PlayData const& play)
 	{
 		brain = std::unique_ptr<NeuralNet>(new NeuralNet(*play.brain));
 		wins = play.wins;
 		games = play.games;
-    };
+	};
+	PlayData(PlayData && play)
+	{
+		std::swap(brain, play.brain);
+		std::swap(wins, play.wins);
+		std::swap(games, play.games);
+	};
+	PlayData& operator=(const PlayData& original)
+	{
+		//brain = std::move(original.brain);
+		brain = std::unique_ptr<NeuralNet>(new NeuralNet(*original.brain));
+		wins = original.wins;
+		games = original.games;
+		return *this;
+	};
+	PlayData& operator=(PlayData& original)
+	{
+		//brain = std::move(original.brain);
+		brain = std::move(original.brain);
+		wins = original.wins;
+		games = original.games;
+		return *this;
+	};
 };
 struct {
     bool operator()(const PlayData & a,const PlayData & b) const
@@ -37,16 +62,30 @@ struct {
 } PlayDataSorter;
 std::vector<PlayData> CreateGeneration(NeuralNet net)
 {
-    std::vector<PlayData> Generation;
-    int generationcount = 20;
-    Generation.emplace_back(PlayData(new NeuralNet(net)));
-    for(int i = 0; i < generationcount-1;++i)
-    {
-        auto brain = new NeuralNet(net);
-        brain->Randomise(1);
-        Generation.emplace_back(PlayData(brain));
-    }
-    return Generation;
+	std::vector<PlayData> Generation;
+	int generationcount = 40;
+	Generation.emplace_back(PlayData(new NeuralNet(net)));
+	for (int i = 0; i < generationcount - 1; ++i)
+	{
+		auto brain = new NeuralNet(net);
+		brain->Randomise(1);
+		Generation.emplace_back(PlayData(brain));
+	}
+	return Generation;
+}
+std::vector<PlayData> CreateGeneration(std::vector<PlayData> PreviousGen)
+{
+	auto sorter = [](const PlayData& A, const PlayData& B) {return A.wins > B.wins; };
+	int midpoint = ((int)(PreviousGen.size()) / 2);
+	//std::sort(PreviousGen.begin(), PreviousGen.end(), sorter);
+	std::partial_sort(PreviousGen.begin(), PreviousGen.begin() + midpoint, PreviousGen.end(), sorter);
+	for (auto it = PreviousGen.begin();it != PreviousGen.begin() + midpoint;++it)
+	{
+		auto brain = new NeuralNet(*it->brain);
+		brain->Randomise(1);
+		*(it + midpoint) = PlayData(brain);
+	}
+	return PreviousGen;
 }
 void PlayTest(int gen,NeuralNet pred,NeuralNet pray);
 void Training(){
@@ -62,23 +101,36 @@ void Training(){
 		std::ifstream bestpred("predweights.txt");
 		if (bestprey)
 		{
+			std::cout << "Load prey" << std::endl;
 			bestprey >> *BestEntPrey.brain;
 			bestprey.close();
 		}
 		if (bestpred)
 		{
-			bestpred >> *BestEntPrey.brain;
+			std::cout << "Load pred" << std::endl;
+			bestpred >> *BestEntPred.brain;
 			bestpred.close();
 		}
+		//PlayTest(0, *BestEntPred.brain, *BestEntPrey.brain);
 	}
+    auto GenerationPrey = CreateGeneration(*BestEntPrey.brain);
+    auto GenerationPred = CreateGeneration(*BestEntPred.brain);
     //Generations
     std::cout<<"Genned seeds"<<std::endl;
-    for(int i = 0;i < 100;++i)
+    for(int i = 0;i < 1900;++i)
     {
         //Create new generation
-        auto GenerationPrey = CreateGeneration(*BestEntPrey.brain);
-        auto GenerationPred = CreateGeneration(*BestEntPred.brain);
-		
+
+		for (PlayData& playprey : GenerationPrey)
+		{
+			playprey.wins = 0;
+			playprey.games = 0;
+		}
+		for (PlayData& playpred : GenerationPred)
+		{
+			playpred.wins = 0;
+			playpred.games = 0;
+		}
         std::cout<<"Generation number:"<<i<<std::endl;
         for(PlayData& playprey : GenerationPrey)
         {
@@ -90,10 +142,13 @@ void Training(){
                 World playenv = World();
                 int runtime = 0;
                 //Copy brains in
-                delete playenv.Pred->brain;
-                playenv.Pred->brain = new NeuralNet(*playpred.brain);
-                delete playenv.Prey->brain;
-                playenv.Prey->brain = new NeuralNet(*playprey.brain);
+				for (int i = 1; i < playenv.EntityList.size(); ++i)
+				{
+					delete playenv.EntityList[i]->brain;
+					playenv.EntityList[i]->brain = new NeuralNet(*playpred.brain);
+				}
+                delete playenv.EntityList.front()->brain;
+				playenv.EntityList.front()->brain = new NeuralNet(*playprey.brain);
 				
                 runtime = playenv.PlayGame(MaxPlayTime);
                 
@@ -110,55 +165,51 @@ void Training(){
 				
             }
         }
-			
-        //std::cout<<"swap best"<<std::endl;
+		GenerationPred = CreateGeneration(GenerationPred);
+		GenerationPrey = CreateGeneration(GenerationPrey);
 		{
-			PlayData out = GenerationPred.front();
+			PlayData out = GenerationPrey.front();
 			BestEntPrey.brain = std::unique_ptr<NeuralNet>(new NeuralNet(*out.brain));
 			BestEntPrey.games = out.games;
 			BestEntPrey.wins = out.wins;
 		}
 		{
-			PlayData out = GenerationPrey.front();
+			PlayData out = GenerationPred.front();
 			BestEntPred.brain = std::unique_ptr<NeuralNet>(new NeuralNet(*out.brain));
 			BestEntPred.games = out.games;
 			BestEntPred.wins = out.wins;
 		}
-		for (PlayData & pred : GenerationPred)
+		//std::cout << "Best Prey:" << BestEntPrey.wins << std::endl;
+		//std::cout << "Best Pred:" << BestEntPred.wins << std::endl;
+		std::cout << "Stats Prey:";
+		for (PlayData& playprey : GenerationPrey)
 		{
-			if (pred.wins > BestEntPred.wins)
+			std::cout << playprey.wins << ",";
+		}
+		std::cout << std::endl;
+		std::cout << "Stats Pred:";
+		for (PlayData& playpred : GenerationPred)
+		{
+			std::cout << playpred.wins << ",";
+		}
+		std::cout << std::endl;
+
+		{
+			std::ofstream bestprey("preyweights.txt");
+			std::ofstream bestpred("predweights.txt");
+			if (bestprey)
 			{
-				BestEntPred.brain = std::unique_ptr<NeuralNet>(new NeuralNet(*pred.brain));
-				BestEntPred.games = pred.games;
-				BestEntPred.wins = pred.wins;
+				bestprey << *BestEntPrey.brain;
+				bestprey.close();
+			}
+			if (bestpred)
+			{
+				bestpred << *BestEntPred.brain;
+				bestpred.close();
 			}
 		}
-		for (PlayData & prey : GenerationPrey)
-		{
-			if (prey.wins > BestEntPrey.wins)
-			{
-				BestEntPrey.brain = std::unique_ptr<NeuralNet>(new NeuralNet(*prey.brain));
-				BestEntPrey.games = prey.games;
-				BestEntPrey.wins = prey.wins;
-			}
-		}
-		std::cout << "Best Prey:" << BestEntPrey.wins << std::endl;
-		std::cout << "Best Pred:" << BestEntPred.wins << std::endl;
+		PlayTest(0, *BestEntPred.brain, *BestEntPrey.brain);
     }
-	{
-		std::ofstream bestprey("preyweights.txt");
-		std::ofstream bestpred("predweights.txt");
-		if (bestprey)
-		{
-			bestprey << *BestEntPrey.brain;
-			bestprey.close();
-		}
-		if (bestpred)
-		{
-			bestpred << *BestEntPrey.brain;
-			bestpred.close();
-		}
-	}
     PlayTest(0,*BestEntPred.brain,*BestEntPrey.brain);
 }
 void OutputData(RenderCamera * camera, std::ofstream & out)
@@ -211,11 +262,14 @@ void PlayTest(int gen,NeuralNet pred,NeuralNet pray)
     std::cout<<"PlayTest"<<std::endl;
 	World playenv = World();
     std::cout<<"swap pred"<<std::endl;
-    delete playenv.Pred->brain;
-    playenv.Pred->brain = new NeuralNet(pred);
-    std::cout<<"swap prey"<<std::endl;
-    delete playenv.Prey->brain;
-    playenv.Prey->brain = new NeuralNet(pray);
+	for (int i = 1; i < playenv.EntityList.size(); ++i)
+	{
+		delete playenv.EntityList[i]->brain;
+		playenv.EntityList[i]->brain = new NeuralNet(pred);
+	}
+	delete playenv.EntityList.front()->brain;
+	playenv.EntityList.front()->brain = new NeuralNet(pray);
+
     std::cout<<"start play"<<std::endl;
 	for(int t = 0;t < MaxPlayTime;++t)
 	{
@@ -224,11 +278,16 @@ void PlayTest(int gen,NeuralNet pred,NeuralNet pray)
 		//std::cout<<"open file"<<std::endl;
 		std::ofstream outfile("./Render/data"+std::to_string(t)+".txt");
         //std::cout<<"write"<<std::endl;
-		OutputData(playenv.Pred->vision,outfile);
+		OutputData(playenv.EntityList[1]->vision,outfile);
 		outfile.close();
+		if (playenv.CheckPredWin())
+		{
+			break;
+		}
         //std::cout<<"close"<<std::endl;
 	}
 }
+/*
 void RandomPlayTest()
 {
 	std::srand(std::time(0));
@@ -252,8 +311,24 @@ void RandomPlayTest()
 			break;
 		}
 	}
+}*/
+void NeuralBrainTest()
+{	
+	using namespace std::chrono;
+	auto brain = NeuralBrain<10, 5>();
+	auto start = std::chrono::high_resolution_clock::now();
+	const int Runtime = 10000;
+	for (int i = 0; i < Runtime; ++i)
+	{
+		brain.Update();
+	}
+	auto end = std::chrono::high_resolution_clock::now();
+	auto time_span = duration_cast<milliseconds>(end - start);
+	std::cout << "Timing full:" << time_span.count() << "\n";
+	std::cout << "Timing single:" << time_span.count() / (float)Runtime << "\n";
 }
 int main(int argc,char **args){
     //RandomPlayTest();
-    Training();
+	NeuralBrainTest();
+    //Training();
 }

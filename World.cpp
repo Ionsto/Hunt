@@ -1,30 +1,31 @@
 #include "World.h"
+#include "RenderObject.h"
 #include <memory>
 World::World()
 {
-    Prey = std::unique_ptr<EntityAI>(new EntityAI());
-    Prey->Pos = Vector(2,0);
-    scene.CameraList.push_back(Prey->vision);
-	scene.ObjectList.push_back(Prey->object);
-	Prey->vision->Angle = 3.14;
-	//Prey->MaxAcceleration = 0.07;
-	Pred = std::unique_ptr<EntityAI>(new EntityAI());
-	Pred->Pos = Vector(-2, 0);
-	scene.CameraList.push_back(Pred->vision);
-	scene.ObjectList.push_back(Pred->object);
-	WorldSize = 8;
+    AddEntity(new EntityAI(), Vector(2, 0));
+	EntityList.back()->object->Colour = 3;
+	//Prey->vision->Angle = 3.14;
+	EntityList.back()->MaxAcceleration *= 1.1;
+	AddEntity(new EntityAI(), Vector(-2, 1));
+	EntityList.back()->object->Colour = 2;
+	AddEntity(new EntityAI(), Vector(-2, -1));
+	EntityList.back()->object->Colour = 2;
+	//AddEntity(new EntityAI(), Vector(-2, -1));
+	//EntityList.back()->object->Colour = 2;
+	WorldSize = 12;
     float sizefactor = WorldSize;
     int wall = 0;
     Walls[wall] = std::unique_ptr<RenderObjectLine>(new RenderObjectLine(Vector(-1,-1)*sizefactor,Vector(0,2)*sizefactor));
-    Walls[wall]->Colour = 2;
+    Walls[wall]->Colour = 4;
     scene.ObjectList.push_back(Walls[wall++].get());
     
     Walls[wall] = std::unique_ptr<RenderObjectLine>(new RenderObjectLine(Vector(-1,1)*sizefactor,Vector(2,0)*sizefactor));
-    Walls[wall]->Colour = 3;
+    Walls[wall]->Colour = 4;
     scene.ObjectList.push_back(Walls[wall++].get());
     
     Walls[wall] = std::unique_ptr<RenderObjectLine>(new RenderObjectLine(Vector(1,1)*sizefactor,Vector(0,-2)*sizefactor));
-    Walls[wall]->Colour = 2;
+    Walls[wall]->Colour = 4;
     scene.ObjectList.push_back(Walls[wall++].get());
     
     Walls[wall] = std::unique_ptr<RenderObjectLine>(new RenderObjectLine(Vector(1,-1)*sizefactor,Vector(-2,0)*sizefactor));
@@ -44,16 +45,31 @@ int World::PlayGame(int timelimit){
 }
 
 bool World::CheckPredWin(){
-    Vector Difference = Pred->Pos - Prey->Pos;
-    if(sqrt(Difference.Dot(Difference)) < WinDistance)
-    {
-        return true;
-    }
+	for (int i = 1;i<this->EntityList.size();++i)
+	{
+		Vector Difference = EntityList[i]->Pos - EntityList[0]->Pos;
+		if (sqrt(Difference.Dot(Difference)) < WinDistance)
+		{
+			return true;
+		}
+	}
     return false;
 }
 
 void World::Update(){
-    Prey->Update(*this);
-    Pred->Update(*this);
+	for (auto & entity : this->EntityList)
+	{
+		entity->Update(*this);
+	}
 	scene.Render();
+}
+
+void World::AddEntity(EntityAI * ent, Vector pos)
+{
+	auto entity = std::unique_ptr<EntityAI>(ent);
+	entity->Pos = pos;
+	scene.CameraList.push_back(entity->vision);
+	scene.ObjectList.push_back(entity->object);
+	EntityList.push_back(std::move(entity));
+	return;
 }

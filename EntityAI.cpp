@@ -1,16 +1,17 @@
 #include "EntityAI.h"
 #include <iostream>
+#include "NeuralBrain.h"
 
 EntityAI::EntityAI()
 {
-    object = new RenderObjectCircle(1);
+    object = new RenderObjectCircle(1.5);
 	object->Colour = 1;
 	object->Pos = Pos;
-	vision = new RenderCamera(50);
+	vision = new RenderCamera(20);
 	vision->Exclude = object;
-	int inputs = 10*vision->SampleCount + 4;
+	int inputs = 4*vision->SampleCount + 3;
 	brain = new NeuralNet(inputs);
-	MaxAcceleration = 0.05;
+	MaxAcceleration = 0.1;
 }
 EntityAI::~EntityAI()
 {
@@ -50,7 +51,7 @@ void EntityAI::UpdateAI(World & world)
 	Acc += Vector(cos(Rot), sin(Rot)) * brain->Outputs[0] * MaxAcceleration;
 	//perp
 	Acc += Vector(sin(Rot), cos(Rot)) * brain->Outputs[1] * MaxAcceleration;
-	RotAcc = brain->Outputs[2]*0.001;
+	RotAcc = brain->Outputs[2]*0.08;
 	//std::cout<<"BrainOutput"<<brain->Outputs[0]<<"\n";
 }
 void EntityAI::Randomise(float random)

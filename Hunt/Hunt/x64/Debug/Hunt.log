@@ -1,0 +1,39 @@
+﻿  World.cpp
+d:\github\hunt\rendercamera.h(11): warning C4305: 'initializing': truncation from 'double' to 'float'
+d:\github\hunt\renderobjectline.h(23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\renderobjectline.h(24): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  RenderScene.cpp
+d:\github\hunt\rendercamera.h(11): warning C4305: 'initializing': truncation from 'double' to 'float'
+d:\github\hunt\renderscene.cpp(16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  RenderCamera.cpp
+d:\github\hunt\rendercamera.h(11): warning C4305: 'initializing': truncation from 'double' to 'float'
+  Neuron.cpp
+d:\github\hunt\neuron.cpp(13): warning C4305: '=': truncation from 'double' to 'float'
+d:\github\hunt\neuron.cpp(31): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\neuron.cpp(53): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\neuron.cpp(55): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+  NeuralNet.cpp
+  main.cpp
+d:\github\hunt\rendercamera.h(11): warning C4305: 'initializing': truncation from 'double' to 'float'
+d:\github\hunt\renderobjectline.h(23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\renderobjectline.h(24): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\main.cpp(182): warning C4305: 'argument': truncation from 'double' to 'float'
+d:\github\hunt\main.cpp(187): warning C4305: 'argument': truncation from 'double' to 'float'
+d:\github\hunt\main.cpp(203): warning C4305: '+=': truncation from 'double' to 'float'
+d:\github\hunt\main.cpp(240): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\github\hunt\main.cpp(252): warning C4305: '+=': truncation from 'double' to 'float'
+  EntityAI.cpp
+d:\github\hunt\rendercamera.h(11): warning C4305: 'initializing': truncation from 'double' to 'float'
+d:\github\hunt\entityai.cpp(13): warning C4305: '=': truncation from 'double' to 'float'
+d:\github\hunt\entityai.cpp(40): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+d:\github\hunt\entityai.cpp(41): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+d:\github\hunt\entityai.cpp(42): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+d:\github\hunt\entityai.cpp(53): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Entity.cpp
+d:\github\hunt\rendercamera.h(11): warning C4305: 'initializing': truncation from 'double' to 'float'
+d:\github\hunt\renderobjectline.h(23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\renderobjectline.h(24): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\entity.cpp(12): warning C4305: '=': truncation from 'double' to 'float'
+d:\github\hunt\entity.cpp(13): warning C4305: '=': truncation from 'double' to 'float'
+  Generating Code...
+  Hunt.vcxproj -> D:\Github\Hunt\Hunt\x64\Debug\Hunt.exe

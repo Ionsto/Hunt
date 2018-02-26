@@ -14,6 +14,7 @@ Entity::Entity()
 }
 void Entity::CheckBounds(World & world)
 {
+	//Fix is borked
     if(abs(Pos.X + Vel.X) >= world.WorldSize)
     {
         Pos.X = world.WorldSize * Pos.X/fabs(Pos.X);
