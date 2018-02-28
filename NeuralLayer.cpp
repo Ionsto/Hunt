@@ -27,7 +27,7 @@ NeuralLayer::~NeuralLayer()
     delete Output;
     //std::cout<<"finished with output"<<std::endl;
 }
-void NeuralLayer::Update(float *inputs){
+void NeuralLayer::Update(const float *inputs){
     int out = 0;
     for(Neuron & neuron : Neurons)
     {

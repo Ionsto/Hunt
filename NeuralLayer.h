@@ -11,7 +11,7 @@ public:
     NeuralLayer(int inputsize,int nodecount);
     NeuralLayer(NeuralLayer const& ner);
     ~NeuralLayer();
-	void Update(float * input);
+	void Update(const float * input);
 	void SetActivation(int activation);
     void Randomise(float delta = 0.5);
 	friend std::ostream& operator<<(std::ostream & os, const NeuralLayer & layer)

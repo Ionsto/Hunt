@@ -13,6 +13,7 @@ class EntityAI :
 private:
 	Colour ColourMapping[5] = {Colour(1,1,1),Colour(0,0,0),Colour(1,0,0),Colour(0,1,0),Colour(0,0,1) };
 public:
+	std::vector<float> Inputs;
     NeuralNet * brain;
     RenderCamera * vision;
     RenderObject * object;

@@ -5,30 +5,17 @@
 #include <iostream>
 class NeuralNet{
 public:
-    int InputSize;
-    float * Inputs = nullptr;
-    float * Outputs = nullptr;
-    std::vector<NeuralLayer> Layers;
 	NeuralNet();
-	NeuralNet(int inputs);
     NeuralNet(NeuralNet const& net);
     ~NeuralNet();
-    void Update();
+	virtual std::vector<float> Update(std::vector<float> const & Inputs);
     void Randomise(float delta = 0.5);
 	friend std::ostream& operator<<(std::ostream & os, const NeuralNet & net)
 	{
-		for (const NeuralLayer & layer : net.Layers)
-		{
-			os << layer;
-		}
 		return os;
 	};
 	friend std::istream& operator>>(std::istream & is,  NeuralNet & net)
 	{
-		for (NeuralLayer & layer : net.Layers)
-		{
-			is >> layer;
-		}
 		return is;
 	};
 };

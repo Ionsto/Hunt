@@ -12,22 +12,23 @@
 #include <ctime>
 #include <stdio.h>
 #include "NeuralBrain.h"
+#include "NeuralNetFF.h"
 //#include <dirent.h>
-
+using BrainType = NeuralBrain<83,15>;
 int MaxPlayTime = 100;
 class PlayData{
 public:
-    std::unique_ptr<NeuralNet> brain;
+    std::unique_ptr<BrainType> brain;
     int wins = 0;
     int games = 0;
-    PlayData(NeuralNet * newbrain){
-		brain = std::unique_ptr<NeuralNet>(newbrain);
+    PlayData(BrainType * newbrain){
+		brain = std::unique_ptr<BrainType>(newbrain);
 		wins = 0;
 		games = 0;
 	};
 	PlayData(PlayData const& play)
 	{
-		brain = std::unique_ptr<NeuralNet>(new NeuralNet(*play.brain));
+		brain = std::unique_ptr<BrainType>(new BrainType(*play.brain));
 		wins = play.wins;
 		games = play.games;
 	};
@@ -40,7 +41,7 @@ public:
 	PlayData& operator=(const PlayData& original)
 	{
 		//brain = std::move(original.brain);
-		brain = std::unique_ptr<NeuralNet>(new NeuralNet(*original.brain));
+		brain = std::unique_ptr<BrainType>(new BrainType(*original.brain));
 		wins = original.wins;
 		games = original.games;
 		return *this;
@@ -60,14 +61,14 @@ struct {
         return a.wins < b.wins;
     }   
 } PlayDataSorter;
-std::vector<PlayData> CreateGeneration(NeuralNet net)
+std::vector<PlayData> CreateGeneration(BrainType net)
 {
 	std::vector<PlayData> Generation;
 	int generationcount = 40;
-	Generation.emplace_back(PlayData(new NeuralNet(net)));
+	Generation.emplace_back(PlayData(new BrainType(net)));
 	for (int i = 0; i < generationcount - 1; ++i)
 	{
-		auto brain = new NeuralNet(net);
+		auto brain = new BrainType(net);
 		brain->Randomise(1);
 		Generation.emplace_back(PlayData(brain));
 	}
@@ -81,20 +82,22 @@ std::vector<PlayData> CreateGeneration(std::vector<PlayData> PreviousGen)
 	std::partial_sort(PreviousGen.begin(), PreviousGen.begin() + midpoint, PreviousGen.end(), sorter);
 	for (auto it = PreviousGen.begin();it != PreviousGen.begin() + midpoint;++it)
 	{
-		auto brain = new NeuralNet(*it->brain);
+		auto brain = new BrainType(*it->brain);
 		brain->Randomise(1);
 		*(it + midpoint) = PlayData(brain);
 	}
 	return PreviousGen;
 }
-void PlayTest(int gen,NeuralNet pred,NeuralNet pray);
+void PlayTest(int gen,BrainType pred,BrainType pray);
 void Training(){
     std::cout<<"Start training"<<std::endl;
     int vision = 50;
     int incount = 10*vision + 4;
-    PlayData BestEntPrey = PlayData(new NeuralNet(incount));
+	// PlayData BestEntPrey = PlayData(new BrainType(incount));
+	PlayData BestEntPrey = PlayData(new BrainType());
     BestEntPrey.brain->Randomise(3);
-    PlayData BestEntPred = PlayData(new NeuralNet(incount));
+	// PlayData BestEntPred = PlayData(new BrainType(incount));
+   PlayData BestEntPred = PlayData(new BrainType());
     BestEntPred.brain->Randomise(3);
 	{
 		std::ifstream bestprey("preyweights.txt");
@@ -145,10 +148,10 @@ void Training(){
 				for (int i = 1; i < playenv.EntityList.size(); ++i)
 				{
 					delete playenv.EntityList[i]->brain;
-					playenv.EntityList[i]->brain = new NeuralNet(*playpred.brain);
+					playenv.EntityList[i]->brain = (NeuralNet*)new BrainType(*playpred.brain);
 				}
                 delete playenv.EntityList.front()->brain;
-				playenv.EntityList.front()->brain = new NeuralNet(*playprey.brain);
+				playenv.EntityList.front()->brain = (NeuralNet*)new BrainType(*playprey.brain);
 				
                 runtime = playenv.PlayGame(MaxPlayTime);
                 
@@ -165,17 +168,18 @@ void Training(){
 				
             }
         }
+		std::cout << "New generation" << std::endl;
 		GenerationPred = CreateGeneration(GenerationPred);
 		GenerationPrey = CreateGeneration(GenerationPrey);
 		{
 			PlayData out = GenerationPrey.front();
-			BestEntPrey.brain = std::unique_ptr<NeuralNet>(new NeuralNet(*out.brain));
+			BestEntPrey.brain = std::unique_ptr<BrainType>(new BrainType(*out.brain));
 			BestEntPrey.games = out.games;
 			BestEntPrey.wins = out.wins;
 		}
 		{
 			PlayData out = GenerationPred.front();
-			BestEntPred.brain = std::unique_ptr<NeuralNet>(new NeuralNet(*out.brain));
+			BestEntPred.brain = std::unique_ptr<BrainType>(new BrainType(*out.brain));
 			BestEntPred.games = out.games;
 			BestEntPred.wins = out.wins;
 		}
@@ -257,7 +261,7 @@ void RaytraceTesting()
     delete bigcircle;
     delete camera;
 }
-void PlayTest(int gen,NeuralNet pred,NeuralNet pray)
+void PlayTest(int gen,BrainType pred,BrainType pray)
 {
     std::cout<<"PlayTest"<<std::endl;
 	World playenv = World();
@@ -265,10 +269,10 @@ void PlayTest(int gen,NeuralNet pred,NeuralNet pray)
 	for (int i = 1; i < playenv.EntityList.size(); ++i)
 	{
 		delete playenv.EntityList[i]->brain;
-		playenv.EntityList[i]->brain = new NeuralNet(pred);
+		playenv.EntityList[i]->brain = (NeuralNet*)new BrainType(pred);
 	}
 	delete playenv.EntityList.front()->brain;
-	playenv.EntityList.front()->brain = new NeuralNet(pray);
+	playenv.EntityList.front()->brain = (NeuralNet*)new BrainType(pray);
 
     std::cout<<"start play"<<std::endl;
 	for(int t = 0;t < MaxPlayTime;++t)
@@ -318,9 +322,10 @@ void NeuralBrainTest()
 	auto brain = NeuralBrain<10, 5>();
 	auto start = std::chrono::high_resolution_clock::now();
 	const int Runtime = 10000;
+	std::vector<float> Inputs(10);
 	for (int i = 0; i < Runtime; ++i)
 	{
-		brain.Update();
+		brain.Update(Inputs);
 	}
 	auto end = std::chrono::high_resolution_clock::now();
 	auto time_span = duration_cast<milliseconds>(end - start);
@@ -329,6 +334,6 @@ void NeuralBrainTest()
 }
 int main(int argc,char **args){
     //RandomPlayTest();
-	NeuralBrainTest();
-    //Training();
+	//NeuralBrainTest();
+    Training();
 }

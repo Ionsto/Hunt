@@ -15,7 +15,7 @@ public:
     Neuron(int inputsize);
     Neuron(Neuron const& ner);
     ~Neuron();
-    void Update(float * Input);
+    void Update(const float * Input);
 	inline float Tanh(float x)
 	{
 		return x / (1.0 + fabs(x));

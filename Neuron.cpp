@@ -25,7 +25,7 @@ Neuron::Neuron(Neuron const& ner)
     Bias = ner.Bias;
     std::memcpy(Weights,ner.Weights,sizeof(float)*(InputSize+1));
 }
-void Neuron::Update(float * input)
+void Neuron::Update(const float * input)
 {
     Output = Bias;
     //std::cout<<"Output"<<Output<<"\n";
