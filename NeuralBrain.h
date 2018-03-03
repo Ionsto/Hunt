@@ -4,8 +4,11 @@
 #include <string>
 #include "math.h"
 #include <functional>
+#include "NeuralNet.h"
+#include <vector>
 
-template<int Inputs,int Nodes>
+template 
+<int Inputs, int Nodes>
 class NeuralBrain : public NeuralNet {
 public:
 	std::vector<float> Outputs;
@@ -22,21 +25,22 @@ public:
 
 	Weights.n
 	*/
-	std::array<float, Stride * (Nodes+1)> WorkingMemory = {};
+	std::array<float, Stride * (Nodes + 1)> WorkingMemory = {};
+	std::vector<float> RandomParam;
 	NeuralBrain();
+	virtual ~NeuralBrain();
 	NeuralBrain(NeuralBrain const& ner);
-    ~NeuralBrain();
 	virtual std::vector<float> Update(std::vector<float> const & input);
 	inline float Tanh(float x)
 	{
 		return x / (1.0 + fabs(x));
-	}
+	};
 	inline float Relu(float x)
 	{
 		return x > 0 ? x : 0;
-	}
-    void Randomise(float delta = 0.5);
-	friend std::ostream& operator<<(std::ostream & is, const NeuralBrain<Inputs,Nodes> & ner)
+	};
+	void Randomise(float delta = 0.5);
+	friend std::ostream& operator<<(std::ostream & is, const NeuralBrain<Inputs, Nodes> & ner)
 	{
 		//Bias
 		is << 1;
@@ -50,8 +54,11 @@ public:
 		//Weight matrix
 		for (int i = Stride; i < ner.WorkingMemory.size(); ++i)
 		{
-			is << (ner.WorkingMemory[i]);
-			is << " ";
+			is << (ner.WorkingMemory[i]) << " ";
+		}
+		for (int i = 0; i < ner.RandomParam.size(); ++i)
+		{
+			is << ner.RandomParam[i] << " ";
 		}
 		return is;
 	};
@@ -61,20 +68,29 @@ public:
 		{
 			is >> (ner.WorkingMemory[i]);
 		}
+		for (int i = 0; i < ner.RandomParam.size(); ++i)
+		{
+			is >> ner.RandomParam[i];
+		}
 		return is;
 	};
 };
 
 
 template<int Inputs, int Nodes>
-NeuralBrain<Inputs, Nodes>::NeuralBrain() 
-{
-	WorkingMemory[0] = 1;
-	Outputs = std::vector<float>(Nodes);
-}
-template<int Inputs, int Nodes>
 NeuralBrain<Inputs, Nodes>::~NeuralBrain()
 {
+
+}
+template<int Inputs, int Nodes>
+NeuralBrain<Inputs, Nodes>::NeuralBrain() : NeuralNet(), RandomParam(Nodes)
+{
+	WorkingMemory[0] = 1;
+	for (int i = 0; i < RandomParam.size(); ++i)
+	{
+		RandomParam[i] = 1;
+	}
+	Outputs = std::vector<float>(Nodes);
 }
 template<int Inputs, int Nodes>
 NeuralBrain<Inputs, Nodes>::NeuralBrain(NeuralBrain<Inputs, Nodes> const& ner) : NeuralBrain<Inputs, Nodes>()
@@ -102,7 +118,7 @@ std::vector<float> NeuralBrain<Inputs, Nodes>::Update(std::vector<float> const &
 	}
 	//std::cout<<"Output"<<Output<<"\n";
 	//std::cout<<"Bias"<<Bias<<"\n";
-	for (int Conv = 0; Conv < 5; ++Conv)
+	for (int Conv = 0; Conv < 1; ++Conv)
 	{
 		for (int Node = 1; Node <= Nodes; ++Node)
 		{
@@ -113,21 +129,26 @@ std::vector<float> NeuralBrain<Inputs, Nodes>::Update(std::vector<float> const &
 			{
 				sum += WorkingMemory[i] * WorkingMemory[StartWeight + i];
 			}
+			//Output
 			WorkingMemory[Inputs + Node] = Tanh(sum);
 		}
 	}
 	//Go backwards
-	for (int Node = Nodes-1; Node >= 0; --Node)
+	for (int Node = 0; Node < Nodes - 1; ++Node)
 	{
-		Outputs[Node] = WorkingMemory[Inputs + 1 + Node];
+		Outputs[Node] = WorkingMemory[Stride - (Node + 1)];
 	}
 	return Outputs;
 }
 template<int Inputs, int Nodes>
 void NeuralBrain<Inputs, Nodes>::Randomise(float random)
 {
-	for (int w = Stride; w < WorkingMemory.size(); ++w)
+	for (int i = 1; i <= RandomParam.size(); ++i)
 	{
-		WorkingMemory[w] += ((std::rand() / (RAND_MAX / 2.0)) - 1) * random;
+		//RandomParam[i] *= (((std::rand() / (float)RAND_MAX)-1)/2.0);
+		for (int w = 0; w < Stride; ++w)
+		{
+			WorkingMemory[(i*Stride) + w] += ((std::rand() / ((float)RAND_MAX / 2.0)) - 1) * random;// *RandomParam[i];
+		}
 	}
 }

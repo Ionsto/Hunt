@@ -14,6 +14,7 @@ public:
     float LinearFriction;
     float LinearFrictionRot;
     Entity();
+	virtual ~Entity() {};
     void Intergrate(World & world);
     void CheckBounds(World & world);
     void Update(World & world);

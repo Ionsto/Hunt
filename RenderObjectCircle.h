@@ -4,7 +4,7 @@
 class RenderObjectCircle : public RenderObject{
 public:
     float RadiusSquared;
-    RenderObjectCircle(float rad){
+    RenderObjectCircle(float rad) : RenderObject(){
         RadiusSquared = rad*rad;
         Colour = 1;
     }

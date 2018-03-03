@@ -5,7 +5,7 @@ RenderScene::RenderScene()
 }
 void RenderScene::Render()
 {
-    for(auto&& cam : CameraList)
+    for(auto& cam : CameraList)
     {
         RenderSingleCamera(cam);
     }

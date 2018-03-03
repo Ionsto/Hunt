@@ -10,7 +10,7 @@ class RenderRay{
 public:
     Vector Pos;
     Vector Direction;
-    float MaxDistance = 20;
+    float MaxDistance = 30;
     float Distance = 0;
     int Colour = 0;
     RenderRay(){};

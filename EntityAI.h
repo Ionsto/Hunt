@@ -3,9 +3,10 @@
 #include "RenderCamera.h"
 #include "RenderObjectCircle.h"
 #include <array>
+#include <memory>
 struct Colour{
-	int R,G,B;
-	Colour(int r=0, int g=0,int b=0) : R(r), G(g),B(b) {};
+	float R,G,B;
+	Colour(float r=0, float g=0, float b=0) : R(r), G(g),B(b) {};
 };
 class EntityAI :
     public Entity
@@ -14,9 +15,9 @@ private:
 	Colour ColourMapping[5] = {Colour(1,1,1),Colour(0,0,0),Colour(1,0,0),Colour(0,1,0),Colour(0,0,1) };
 public:
 	std::vector<float> Inputs;
-    NeuralNet * brain;
-    RenderCamera * vision;
-    RenderObject * object;
+    std::unique_ptr<NeuralNet> brain;
+	std::unique_ptr<RenderCamera> vision;
+	std::unique_ptr<RenderObject> object;
     EntityAI();
     ~EntityAI();
     Colour RayToRGB(RenderRay & ray);

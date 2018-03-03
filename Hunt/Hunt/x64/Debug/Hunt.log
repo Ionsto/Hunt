@@ -1,4 +1,5 @@
 ﻿  World.cpp
+d:\github\hunt\neuron.h(21): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
 d:\github\hunt\rendercamera.h(11): warning C4305: 'initializing': truncation from 'double' to 'float'
 d:\github\hunt\renderobjectline.h(23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 d:\github\hunt\renderobjectline.h(24): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
@@ -7,33 +8,69 @@ d:\github\hunt\rendercamera.h(11): warning C4305: 'initializing': truncation fro
 d:\github\hunt\renderscene.cpp(16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   RenderCamera.cpp
 d:\github\hunt\rendercamera.h(11): warning C4305: 'initializing': truncation from 'double' to 'float'
-  Neuron.cpp
-d:\github\hunt\neuron.cpp(13): warning C4305: '=': truncation from 'double' to 'float'
-d:\github\hunt\neuron.cpp(31): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-d:\github\hunt\neuron.cpp(53): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-d:\github\hunt\neuron.cpp(55): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-  NeuralNet.cpp
+  NeuronLSTM.cpp
+d:\github\hunt\neuronlstm.cpp(13): warning C4305: '=': truncation from 'double' to 'float'
+d:\github\hunt\neuronlstm.cpp(31): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\neuronlstm.cpp(55): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\neuronlstm.cpp(57): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+  NeuralNetFF.cpp
+d:\github\hunt\neuron.h(21): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  NeuralLayerConv.cpp
+d:\github\hunt\neuron.h(21): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\neurallayerconv.cpp(41): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  NeuralLayer.cpp
+d:\github\hunt\neuron.h(21): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
   main.cpp
+d:\github\hunt\neuron.h(21): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
 d:\github\hunt\rendercamera.h(11): warning C4305: 'initializing': truncation from 'double' to 'float'
 d:\github\hunt\renderobjectline.h(23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 d:\github\hunt\renderobjectline.h(24): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\github\hunt\main.cpp(182): warning C4305: 'argument': truncation from 'double' to 'float'
-d:\github\hunt\main.cpp(187): warning C4305: 'argument': truncation from 'double' to 'float'
-d:\github\hunt\main.cpp(203): warning C4305: '+=': truncation from 'double' to 'float'
-d:\github\hunt\main.cpp(240): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-d:\github\hunt\main.cpp(252): warning C4305: '+=': truncation from 'double' to 'float'
+d:\github\hunt\main.cpp(64): warning C4522: 'PlayData': multiple assignment operators specified
+d:\github\hunt\main.cpp(170): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\main.cpp(171): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\main.cpp(172): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\main.cpp(266): warning C4305: 'argument': truncation from 'double' to 'float'
+d:\github\hunt\main.cpp(271): warning C4305: 'argument': truncation from 'double' to 'float'
+d:\github\hunt\main.cpp(287): warning C4305: '+=': truncation from 'double' to 'float'
+d:\github\hunt\main.cpp(313): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\main.cpp(314): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\main.cpp(315): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\neuralbrain.h(149): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+  d:\github\hunt\neuralbrain.h(143): note: while compiling class template member function 'void NeuralBrain<83,40>::Randomise(float)'
+  d:\github\hunt\main.cpp(78): note: see reference to function template instantiation 'void NeuralBrain<83,40>::Randomise(float)' being compiled
+  d:\github\hunt\main.cpp(38): note: see reference to class template instantiation 'NeuralBrain<83,40>' being compiled
+d:\github\hunt\neuralbrain.h(35): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  d:\github\hunt\neuralbrain.h(34): note: while compiling class template member function 'float NeuralBrain<10,5>::Tanh(float)'
+  d:\github\hunt\neuralbrain.h(131): note: see reference to function template instantiation 'float NeuralBrain<10,5>::Tanh(float)' being compiled
+  d:\github\hunt\main.cpp(366): note: see reference to class template instantiation 'NeuralBrain<10,5>' being compiled
   EntityAI.cpp
+d:\github\hunt\neuron.h(21): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
 d:\github\hunt\rendercamera.h(11): warning C4305: 'initializing': truncation from 'double' to 'float'
-d:\github\hunt\entityai.cpp(13): warning C4305: '=': truncation from 'double' to 'float'
-d:\github\hunt\entityai.cpp(40): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-d:\github\hunt\entityai.cpp(41): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-d:\github\hunt\entityai.cpp(42): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-d:\github\hunt\entityai.cpp(53): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\entityai.cpp(16): warning C4305: '=': truncation from 'double' to 'float'
+d:\github\hunt\entityai.cpp(44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+d:\github\hunt\entityai.cpp(45): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+d:\github\hunt\entityai.cpp(46): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+d:\github\hunt\entityai.cpp(58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\neuralbrain.h(35): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  d:\github\hunt\neuralbrain.h(34): note: while compiling class template member function 'float NeuralBrain<83,40>::Tanh(float)'
+  d:\github\hunt\neuralbrain.h(131): note: see reference to function template instantiation 'float NeuralBrain<83,40>::Tanh(float)' being compiled
+  d:\github\hunt\entityai.cpp(15): note: see reference to class template instantiation 'NeuralBrain<83,40>' being compiled
   Entity.cpp
+d:\github\hunt\neuron.h(21): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
 d:\github\hunt\rendercamera.h(11): warning C4305: 'initializing': truncation from 'double' to 'float'
 d:\github\hunt\renderobjectline.h(23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 d:\github\hunt\renderobjectline.h(24): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 d:\github\hunt\entity.cpp(12): warning C4305: '=': truncation from 'double' to 'float'
 d:\github\hunt\entity.cpp(13): warning C4305: '=': truncation from 'double' to 'float'
+d:\github\hunt\entity.cpp(20): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\entity.cpp(25): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Generating Code...
-  Hunt.vcxproj -> D:\Github\Hunt\Hunt\x64\Debug\Hunt.exe
+  LINK : D:\Github\Hunt\Hunt\x64\Debug\Hunt.exe not found or not built by the last incremental link; performing full link
+NeuralNet.obj : error LNK2005: "public: __cdecl NeuralLayer::NeuralLayer(class NeuralLayer const &)" (??0NeuralLayer@@QEAA@AEBV0@@Z) already defined in NeuralLayer.obj
+NeuralNet.obj : error LNK2005: "public: __cdecl NeuralLayer::NeuralLayer(int,int)" (??0NeuralLayer@@QEAA@HH@Z) already defined in NeuralLayer.obj
+NeuralNet.obj : error LNK2005: "public: __cdecl NeuralLayer::NeuralLayer(void)" (??0NeuralLayer@@QEAA@XZ) already defined in NeuralLayer.obj
+NeuralNet.obj : error LNK2005: "public: __cdecl NeuralLayer::~NeuralLayer(void)" (??1NeuralLayer@@QEAA@XZ) already defined in NeuralLayer.obj
+NeuralNet.obj : error LNK2005: "public: void __cdecl NeuralLayer::Randomise(float)" (?Randomise@NeuralLayer@@QEAAXM@Z) already defined in NeuralLayer.obj
+NeuralLayer.obj : error LNK2019: unresolved external symbol "public: void __cdecl Neuron::Update(float const *)" (?Update@Neuron@@QEAAXPEBM@Z) referenced in function "public: void __cdecl NeuralLayer::Update(float const *)" (?Update@NeuralLayer@@QEAAXPEBM@Z)
+NeuralLayerConv.obj : error LNK2001: unresolved external symbol "public: void __cdecl Neuron::Update(float const *)" (?Update@Neuron@@QEAAXPEBM@Z)
+D:\Github\Hunt\Hunt\x64\Debug\Hunt.exe : fatal error LNK1120: 1 unresolved externals

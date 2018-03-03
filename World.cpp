@@ -3,32 +3,35 @@
 #include <memory>
 World::World()
 {
-    AddEntity(new EntityAI(), Vector(2, 0));
+	AddEntity(std::make_unique<EntityAI>(), Vector(2, 0));
 	EntityList.back()->object->Colour = 3;
+	EntityList.back()->vision->Angle *= 1.25;
 	//Prey->vision->Angle = 3.14;
-	EntityList.back()->MaxAcceleration *= 1.1;
-	AddEntity(new EntityAI(), Vector(-2, 1));
+	EntityList.back()->MaxAcceleration *= 1.25;
+	AddEntity(std::make_unique<EntityAI>(), Vector(-2, -1));
 	EntityList.back()->object->Colour = 2;
-	AddEntity(new EntityAI(), Vector(-2, -1));
+	AddEntity(std::make_unique<EntityAI>(), Vector(-2, -1));
 	EntityList.back()->object->Colour = 2;
-	//AddEntity(new EntityAI(), Vector(-2, -1));
-	//EntityList.back()->object->Colour = 2;
-	WorldSize = 12;
+	AddEntity(std::make_unique<EntityAI>(), Vector(-2, -1));
+	EntityList.back()->object->Colour = 2;
+	AddEntity(std::make_unique<EntityAI>(), Vector(-2, -1));
+	EntityList.back()->object->Colour = 2;
+	WorldSize = 20;
     float sizefactor = WorldSize;
     int wall = 0;
-    Walls[wall] = std::unique_ptr<RenderObjectLine>(new RenderObjectLine(Vector(-1,-1)*sizefactor,Vector(0,2)*sizefactor));
+    Walls[wall] = std::make_unique<RenderObjectLine>(Vector(-1,-1)*sizefactor,Vector(0,2)*sizefactor);
     Walls[wall]->Colour = 4;
     scene.ObjectList.push_back(Walls[wall++].get());
     
-    Walls[wall] = std::unique_ptr<RenderObjectLine>(new RenderObjectLine(Vector(-1,1)*sizefactor,Vector(2,0)*sizefactor));
+    Walls[wall] = std::make_unique<RenderObjectLine>(Vector(-1,1)*sizefactor,Vector(2,0)*sizefactor);
     Walls[wall]->Colour = 4;
     scene.ObjectList.push_back(Walls[wall++].get());
     
-    Walls[wall] = std::unique_ptr<RenderObjectLine>(new RenderObjectLine(Vector(1,1)*sizefactor,Vector(0,-2)*sizefactor));
+    Walls[wall] = std::make_unique<RenderObjectLine>(Vector(1,1)*sizefactor,Vector(0,-2)*sizefactor);
     Walls[wall]->Colour = 4;
     scene.ObjectList.push_back(Walls[wall++].get());
     
-    Walls[wall] = std::unique_ptr<RenderObjectLine>(new RenderObjectLine(Vector(1,-1)*sizefactor,Vector(-2,0)*sizefactor));
+    Walls[wall] = std::make_unique<RenderObjectLine>(Vector(1,-1)*sizefactor,Vector(-2,0)*sizefactor);
     Walls[wall]->Colour = 4;
     scene.ObjectList.push_back(Walls[wall++].get());
 }
@@ -64,12 +67,11 @@ void World::Update(){
 	scene.Render();
 }
 
-void World::AddEntity(EntityAI * ent, Vector pos)
+void World::AddEntity(std::unique_ptr<EntityAI> ent, Vector pos)
 {
-	auto entity = std::unique_ptr<EntityAI>(ent);
-	entity->Pos = pos;
-	scene.CameraList.push_back(entity->vision);
-	scene.ObjectList.push_back(entity->object);
-	EntityList.push_back(std::move(entity));
+	ent->Pos = pos;
+	scene.CameraList.push_back(ent->vision.get());
+	scene.ObjectList.push_back(ent->object.get());
+	EntityList.push_back(std::move(ent));
 	return;
 }

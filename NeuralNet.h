@@ -7,7 +7,7 @@ class NeuralNet{
 public:
 	NeuralNet();
     NeuralNet(NeuralNet const& net);
-    ~NeuralNet();
+	virtual ~NeuralNet();
 	virtual std::vector<float> Update(std::vector<float> const & Inputs);
     void Randomise(float delta = 0.5);
 	friend std::ostream& operator<<(std::ostream & os, const NeuralNet & net)

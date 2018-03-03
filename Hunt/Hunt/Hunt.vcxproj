@@ -121,6 +121,7 @@
     <ClCompile Include="..\..\NeuralLayer.cpp" />
     <ClCompile Include="..\..\NeuralLayerConv.cpp" />
     <ClCompile Include="..\..\NeuralNet.cpp" />
+    <ClCompile Include="..\..\NeuralNetFF.cpp" />
     <ClCompile Include="..\..\Neuron.cpp" />
     <ClCompile Include="..\..\NeuronLSTM.cpp" />
     <ClCompile Include="..\..\RenderCamera.cpp" />
@@ -130,10 +131,12 @@
   <ItemGroup>
     <ClInclude Include="..\..\Entity.h" />
     <ClInclude Include="..\..\EntityAI.h" />
+    <ClInclude Include="..\..\NeuralBit.h" />
     <ClInclude Include="..\..\NeuralBrain.h" />
     <ClInclude Include="..\..\NeuralLayer.h" />
     <ClInclude Include="..\..\NeuralLayerConv.h" />
     <ClInclude Include="..\..\NeuralNet.h" />
+    <ClInclude Include="..\..\NeuralNetFF.h" />
     <ClInclude Include="..\..\Neuron.h" />
     <ClInclude Include="..\..\NeuronLSTM.h" />
     <ClInclude Include="..\..\RenderCamera.h" />

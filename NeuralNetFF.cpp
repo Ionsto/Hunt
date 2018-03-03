@@ -1,4 +1,5 @@
 #include <algorithm>
+#include "NeuralLayer.h"
 #include "NeuralNetFF.h"
 #include <iostream>
 

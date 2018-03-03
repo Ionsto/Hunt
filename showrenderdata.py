@@ -14,7 +14,7 @@ def GetData(name="renderdata.txt"):
 	datafile.close()
 	return data
 ImageSize = (int(1920/2),int(1080/2))
-maxdistance=20
+maxdistance=30
 def GetColourFromRay(ray):
 	raycolour = int(ray[1])
 	raydistance = ray[0]

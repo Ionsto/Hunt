@@ -15,5 +15,5 @@ public:
     bool CheckPredWin();
     int PlayGame(int timelimit);
     void Update();
-    void AddEntity(EntityAI * ent,Vector pos);
+    void AddEntity(std::unique_ptr<EntityAI> ent,Vector pos);
 };

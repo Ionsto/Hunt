@@ -8,7 +8,7 @@ class RenderCamera{
 public:
     Vector Pos;
     float Angle = 0;
-    float FOV = (80/180.0) *3.14;
+    float FOV = (100/180.0) *3.14;
     float MaxDistance = 20;
     int SampleCount;
     RenderObject * Exclude = nullptr;

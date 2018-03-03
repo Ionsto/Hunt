@@ -1,4 +1,5 @@
 {
+    
     "files.associations": {
         "cmath": "cpp",
         "algorithm": "cpp",
@@ -42,6 +43,14 @@
         "xstddef": "cpp",
         "xstring": "cpp",
         "xtr1common": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "functional": "cpp",
+        "list": "cpp",
+        "random": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "xfunctional": "cpp",
+        "xhash": "cpp",
+        "bitset": "cpp"
     }
 }

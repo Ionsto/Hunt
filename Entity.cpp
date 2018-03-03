@@ -17,12 +17,12 @@ void Entity::CheckBounds(World & world)
 	//Fix is borked
     if(abs(Pos.X + Vel.X) >= world.WorldSize)
     {
-        Pos.X = world.WorldSize * Pos.X/fabs(Pos.X);
+        Pos.X = (world.WorldSize-0.1) * Pos.X/fabs(Pos.X);
         Vel.X = 0;
     }
     if(abs(Pos.Y + Vel.Y) >= world.WorldSize)
     {
-        Pos.Y = world.WorldSize * Pos.Y/fabs(Pos.Y);
+        Pos.Y = (world.WorldSize - 0.1) * Pos.Y/fabs(Pos.Y);
         Vel.Y = 0;
     }
 }
