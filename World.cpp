@@ -5,7 +5,7 @@ World::World()
 {
 	AddEntity(std::make_unique<EntityAI>(), Vector(2, 0));
 	EntityList.back()->object->Colour = 3;
-	EntityList.back()->vision->Angle *= 1.25;
+	EntityList.back()->vision->Angle *= 1.5;
 	//Prey->vision->Angle = 3.14;
 	EntityList.back()->MaxAcceleration *= 1.25;
 	AddEntity(std::make_unique<EntityAI>(), Vector(-2, -1));

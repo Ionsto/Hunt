@@ -9,7 +9,7 @@ public:
     NeuralNet(NeuralNet const& net);
 	virtual ~NeuralNet();
 	virtual std::vector<float> Update(std::vector<float> const & Inputs);
-    void Randomise(float delta = 0.5);
+	virtual  void Randomise(float delta = 0.5);
 	friend std::ostream& operator<<(std::ostream & os, const NeuralNet & net)
 	{
 		return os;

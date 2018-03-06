@@ -9,20 +9,22 @@
 #include <string>
 #include <chrono>
 #include <cstdlib>
+#include "bitmap_image.hpp"
 #include <ctime>
 #include <stdio.h>
 #include <random>
 #include "NeuralBrain.h"
 #include "NeuralBit.h"
+
 //#include <dirent.h>
-using BrainType = NeuralBrain<43>;//NeuralBit<123,100>;
-int MaxPlayTime = 100;
-int RandomPlays = 5;
+using BrainType = NeuralBrain<83, 100>;//NeuralBrain<83,100>;
+int MaxPlayTime = 300;
+int RandomPlays = 10;
 int GenerationCount =  10000;
-int GenerationSize = 20;
+int GenerationSize = 40;
 float width = 20;
-std::random_device rd;  //Will be used to obtain a seed for the random number engine
-std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+std::random_device rd;  
+std::mt19937 gen(rd());
 
 class PlayData{
 public:
@@ -76,7 +78,7 @@ std::vector<PlayData> CreateGeneration(BrainType net)
 	for (int i = 0; i < GenerationSize - 1; ++i)
 	{
 		auto brain = std::make_unique<BrainType>(net);
-		brain->Randomise(1);
+		brain->Randomise(0.5 );
 		Generation.emplace_back(PlayData(std::move(brain)));
 	}
 	return Generation;
@@ -95,14 +97,12 @@ std::vector<PlayData> CreateGeneration(std::vector<PlayData> PreviousGen)
 	}
 	return PreviousGen;
 }
-void PlayTest(int gen,BrainType pred,BrainType pray);
+void PlayTest(int gen,BrainType * pred,BrainType * pray);
 void Training(){
 	using namespace std::chrono;
 	std::uniform_real_distribution<> Position((float)-width, (float)width);
 	std::uniform_real_distribution<> Rotation((float)0, (float)2 * 3.14);
     std::cout<<"Start training"<<std::endl;
-    int vision = 50;
-    int incount = 10*vision + 4;
 	PlayData BestEntPrey = PlayData(std::make_unique<BrainType>());
     BestEntPrey.brain->Randomise(3);
 	PlayData BestEntPred = PlayData(std::make_unique<BrainType>());
@@ -232,18 +232,18 @@ void Training(){
 					bestpred.close();
 				}
 			}
-			PlayTest(i, *BestEntPred.brain, *BestEntPrey.brain);
+			PlayTest(i, BestEntPred.brain.get(), BestEntPrey.brain.get());
 		}
 		auto end = std::chrono::high_resolution_clock::now();
 		auto time_span = duration_cast<milliseconds>(end - start);
 		std::cout << "Timing Generation:" << time_span.count() << "\n";
 		
     }
-    PlayTest(-1,*BestEntPred.brain,*BestEntPrey.brain);
+	PlayTest(-1, BestEntPred.brain.get(), BestEntPrey.brain.get());
 }
 void OutputDataRender(RenderCamera * camera, std::ofstream & out)
 {
-	for (auto& ray : camera->VisionData)
+	for (auto ray : camera->VisionData)
 	{
 		out << ray.Distance << " " << ray.Colour << std::endl;
 	}
@@ -252,10 +252,44 @@ void OutputDataPosition(EntityAI * entity, std::ofstream & out)
 {
 	out << entity->Pos.X << " " << entity->Pos.Y << " " << entity->Rot << " " << entity->object->Colour << std::endl;
 }
+
+Colour RayToRGB(RenderRay & ray)
+{
+	static const Colour ColourMapping[5] = {Colour(1,1,1),Colour(0,0,0),Colour(1,0,0),Colour(0,1,0),Colour(0,0,1) };
+	auto rawcolour = ColourMapping[ray.Colour];
+	auto maxcolour = ColourMapping[0];
+	float blendfactor = ray.Distance/ray.MaxDistance;
+	return Colour(((rawcolour.R*(1-blendfactor)) + (maxcolour.R*blendfactor)),
+	((rawcolour.G*(1-blendfactor)) + (maxcolour.G*blendfactor)),
+	((rawcolour.B*(1-blendfactor)) + (maxcolour.B*blendfactor)));
+}
+void OutputDataRenderBitmap(RenderCamera * camera, std::string output)
+{
+	static const int DeltaX = 5;
+	static const int Height = 50;
+	int Width = camera->SampleCount*DeltaX;
+   	cartesian_canvas canvas(Width,Height);
+	canvas.pen_color(255, 255, 255);
+	canvas.fill_rectangle(0, 0, camera->SampleCount*DeltaX,Height);
+	int XPos = -Width/2;
+	for (auto & ray : camera->VisionData)
+	{
+		auto Colour = RayToRGB(ray);
+		canvas.pen_width(1);
+		int drawheight = int(0.5*Height * (ray.MaxDistance-ray.Distance)/ray.MaxDistance);
+		canvas.pen_color((int)(Colour.R*255), (int)(Colour.G*255),(int)(Colour.B*255));
+		canvas.fill_rectangle(XPos, int(-drawheight/2.0),XPos + DeltaX, int(drawheight/2.0));
+		XPos += DeltaX;
+	}
+   	canvas.image().save_image(output);
+}
+
+
+
 void RaytraceTesting()
 {
     RenderScene scene = RenderScene();
-    RenderCamera * camera = new RenderCamera(1000);
+    RenderCamera * camera = new RenderCamera(200);
     
     RenderObject * bigcircle = new RenderObjectCircle(1);
     bigcircle->Pos.X = 6;
@@ -279,18 +313,16 @@ void RaytraceTesting()
     scene.CameraList.push_back(camera);
     for(int i = 0; i < 36;++i)
     {
-		std::ofstream outfile("./Render/data"+std::to_string(i)+".txt");
 		scene.Render();
-		OutputDataRender(camera,outfile);
+		OutputDataRenderBitmap(camera,"./RenderImage/data"+std::to_string(i)+".bmp ");
 		camera->Angle += 3.14*(10.0/180.0);
-		outfile.close();
 	}
     delete circle;
     delete redcircle;
     delete bigcircle;
     delete camera;
 }
-void PlayTest(int generation,BrainType pred,BrainType pray)
+void PlayTest(int generation,BrainType * pred,BrainType * pray)
 {
 	std::uniform_real_distribution<> Position((float)-width, (float)width);
 	std::uniform_real_distribution<> Rotation((float)0, (float)2 * 3.14);
@@ -299,9 +331,9 @@ void PlayTest(int generation,BrainType pred,BrainType pray)
     std::cout<<"swap pred"<<std::endl;
 	for (int i = 1; i < playenv.EntityList.size(); ++i)
 	{
-		playenv.EntityList[i]->brain = std::make_unique<BrainType>(pred);
+		playenv.EntityList[i]->brain = std::make_unique<BrainType>(*pred);
 	}
-	playenv.EntityList.front()->brain = std::make_unique<BrainType>(pray);
+	playenv.EntityList.front()->brain = std::make_unique<BrainType>(*pray);
 	for (std::unique_ptr<EntityAI> & entity : playenv.EntityList)
 	{
 		entity->Pos.X = Position(gen);
@@ -314,14 +346,18 @@ void PlayTest(int generation,BrainType pred,BrainType pray)
 	{
         //std::cout<<"Update"<<std::endl;
 		outfile << "Frame " << t << std::endl;
+    	//std::cout<<"update play"<<std::endl;
 		playenv.Update();
 		for (auto & entity : playenv.EntityList)
 		{
 			OutputDataPosition(entity.get(),outfile);
 		}
-		/*std::ofstream outfile("./Render/data"+std::to_string(t)+".txt");
-        OutputDataRender(playenv.EntityList[1]->vision,outfile);
-		outfile.close();*/
+		OutputDataRenderBitmap(playenv.EntityList[1]->vision.get(),"./RenderImage/data"+std::to_string(t)+".bmp");
+		//std::ofstream renderfile("./Render/data"+std::to_string(t)+".txt");
+		//renderfile << 0 << std::endl;
+    	//OutputDataRender(playenv.EntityList[1]->vision.get(),renderfile);
+		//renderfile.close();
+		//std::cout << "check win" << std::endl;
 		if (playenv.CheckPredWin())
 		{
 			break;
@@ -354,24 +390,31 @@ void RandomPlayTest()
 		}
 	}
 }*/
+template
+<int Input,int Nodes>
 void NeuralBrainTest()
 {	
 	using namespace std::chrono;
-	auto brain = NeuralBrain<10, 5>();
+	auto brain = NeuralBrain<Input, Nodes>();
+	std::vector<float> Inputs(Input);
+	Inputs.resize(Input,0);
+	int Runtime = 10000;
 	auto start = std::chrono::high_resolution_clock::now();
-	const int Runtime = 10000;
-	std::vector<float> Inputs(10);
 	for (int i = 0; i < Runtime; ++i)
 	{
 		brain.Update(Inputs);
 	}
 	auto end = std::chrono::high_resolution_clock::now();
-	auto time_span = duration_cast<milliseconds>(end - start);
-	std::cout << "Timing full:" << time_span.count() << "\n";
-	std::cout << "Timing single:" << time_span.count() / (float)Runtime << "\n";
+	auto time_span = duration_cast<nanoseconds>(end - start);
+	//std::cout << "Stats:" << Input << "-" << Nodes << std::endl;
+	//std::cout << "Timing full:" << time_span.count() << std::endl;
+	//std::cout << "Timing single:" << time_span.count() / (float)Runtime << std::endl;
+	//std::cout << "FPS est:" << 1.0/(time_span.count() / ((float)Runtime*1000000000)) << std::endl;
+	std::cout << Input << "-" << Nodes << " : " << time_span.count() / (float)Runtime << std::endl;
 }
 int main(int argc,char **args){
     //RandomPlayTest();
-	//NeuralBrainTest();
-    Training();
+	//RaytraceTesting();
+	Training();
+	return 0;
 }

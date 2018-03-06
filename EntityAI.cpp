@@ -2,6 +2,7 @@
 #include <iostream>
 #include "NeuralNetFF.h"
 #include "NeuralBit.h"
+#include "NeuralBrain.h"
 #include <memory>
 
 EntityAI::EntityAI()
@@ -10,11 +11,12 @@ EntityAI::EntityAI()
     object = std::make_unique<RenderObjectCircle>(1.5);
 	object->Colour = 1;
 	object->Pos = Pos;
-	vision = std::make_unique<RenderCamera>(10);
+	vision = std::make_unique<RenderCamera>(20);
 	vision->Exclude = object.get();
 	int inputs = 4*vision->SampleCount + 3;
 	Inputs = std::vector<float>(inputs);
-	brain = std::make_unique<NeuralBit<123, 50>>();
+	Inputs.resize(inputs, 0);
+	brain = std::make_unique<NeuralBrain<83, 100>>();
 	MaxAcceleration = 0.1;
 }
 EntityAI::~EntityAI()
@@ -52,10 +54,12 @@ void EntityAI::UpdateAI(World & world)
 	std::vector<float> Outputs = brain->Update(Inputs);
 	//parallel
 	int i = 0;
-	Acc += Vector(cos(Rot), sin(Rot)) * Outputs[i++] * MaxAcceleration;
+	//std::coutstd::cout << Outputs[0]<<std::endl;
+	Acc += Vector(cos(Rot), sin(Rot)) * Outputs[0] * MaxAcceleration;
 	//perp
 	Acc += Vector(-sin(Rot), cos(Rot)) * Outputs[i++] * MaxAcceleration;
-	RotAcc =Outputs[i++]  *0.08;
+	//std::cout << Outputs[1]<<"\n";
+	RotAcc += Outputs[i++] * 0.1;
 	//std::cout<<"BrainOutput"<<brain->Outputs[0]<<"\n";
 }
 void EntityAI::Randomise(float random)

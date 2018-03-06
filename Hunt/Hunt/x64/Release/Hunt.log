@@ -1,17 +1,28 @@
-﻿  EntityAI.cpp
+﻿  main.cpp
 d:\github\hunt\Neuron.h(21): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
 d:\github\hunt\RenderCamera.h(11): warning C4305: 'initializing': truncation from 'double' to 'float'
-..\..\EntityAI.cpp(18): warning C4305: '=': truncation from 'double' to 'float'
-..\..\EntityAI.cpp(58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.12.25827\include\memory(2585): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  ..\..\EntityAI.cpp(10): note: see reference to function template instantiation 'std::unique_ptr<RenderObjectCircle,std::default_delete<_Ty>> std::make_unique<RenderObjectCircle,double,0>(double &&)' being compiled
-          with
-          [
-              _Ty=RenderObjectCircle
-          ]
+d:\github\hunt\RenderObjectLine.h(23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\RenderObjectLine.h(24): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+..\..\main.cpp(65): warning C4522: 'PlayData': multiple assignment operators specified
+..\..\main.cpp(167): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+..\..\main.cpp(168): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+..\..\main.cpp(169): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+..\..\main.cpp(264): warning C4305: 'argument': truncation from 'double' to 'float'
+..\..\main.cpp(269): warning C4305: 'argument': truncation from 'double' to 'float'
+..\..\main.cpp(285): warning C4305: '+=': truncation from 'double' to 'float'
+..\..\main.cpp(307): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+..\..\main.cpp(308): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+..\..\main.cpp(309): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\github\hunt\NeuralBrain.h(153): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+  d:\github\hunt\NeuralBrain.h(147): note: while compiling class template member function 'void NeuralBrain<83,100>::Randomise(float)'
+  ..\..\main.cpp(79): note: see reference to function template instantiation 'void NeuralBrain<83,100>::Randomise(float)' being compiled
+  ..\..\main.cpp(39): note: see reference to class template instantiation 'NeuralBrain<83,100>' being compiled
+d:\github\hunt\NeuralBrain.h(35): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  d:\github\hunt\NeuralBrain.h(34): note: while compiling class template member function 'float NeuralBrain<100,100>::Tanh(float)'
+  d:\github\hunt\NeuralBrain.h(135): note: see reference to function template instantiation 'float NeuralBrain<100,100>::Tanh(float)' being compiled
   Generating code
-  1 of 976 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    3 functions had inline decision re-evaluated but remain unchanged
+  62 of 375 functions (16.5%) were compiled, the rest were copied from previous compilation.
+    8 functions were new in current compilation
+    20 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Hunt.vcxproj -> D:\Github\Hunt\Hunt\x64\Release\Hunt.exe

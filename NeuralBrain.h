@@ -12,10 +12,9 @@ template
 class NeuralBrain : public NeuralNet {
 public:
 	std::vector<float> Outputs;
-	int NodeCount = Nodes;
-	int InputCount = Inputs;
 	int ActivationFunction = 0;
 	static constexpr int Stride = (Inputs + 1 + Nodes);
+	static constexpr int Convergance = 4;
 	/*
 	Bulk allocate ourselves some of that memory bois
 	Layout
@@ -39,7 +38,11 @@ public:
 	{
 		return x > 0 ? x : 0;
 	};
-	void Randomise(float delta = 0.5);
+	inline float ClippedIdentity(float x)
+	{
+		return x > -1 ? (x < 1 ? x :1) : -1;
+	};
+	virtual void Randomise(float delta = 0.5);
 	friend std::ostream& operator<<(std::ostream & is, const NeuralBrain<Inputs, Nodes> & ner)
 	{
 		//Bias
@@ -90,7 +93,8 @@ NeuralBrain<Inputs, Nodes>::NeuralBrain() : NeuralNet(), RandomParam(Nodes)
 	{
 		RandomParam[i] = 1;
 	}
-	Outputs = std::vector<float>(Nodes);
+	Outputs = std::vector<float>();
+	Outputs.resize(Nodes, 0);
 }
 template<int Inputs, int Nodes>
 NeuralBrain<Inputs, Nodes>::NeuralBrain(NeuralBrain<Inputs, Nodes> const& ner) : NeuralBrain<Inputs, Nodes>()
@@ -101,6 +105,8 @@ NeuralBrain<Inputs, Nodes>::NeuralBrain(NeuralBrain<Inputs, Nodes> const& ner) :
 		//Sanatise our preset outputs
 		WorkingMemory[i] = 0;
 	}
+	Outputs = std::vector<float>();
+	Outputs.resize(Nodes, 0);
 }
 /*
 template<int Inputs, int Nodes>
@@ -118,23 +124,24 @@ std::vector<float> NeuralBrain<Inputs, Nodes>::Update(std::vector<float> const &
 	}
 	//std::cout<<"Output"<<Output<<"\n";
 	//std::cout<<"Bias"<<Bias<<"\n";
-	for (int Conv = 0; Conv < 1; ++Conv)
+	for (int Conv = 0; Conv < Convergance; ++Conv)
 	{
-		for (int Node = 1; Node <= Nodes; ++Node)
+		int StartWeight = 0;
+		for (int Node = 0; Node < Nodes; ++Node)
 		{
 			float sum = 0;
-			int StartWeight = Node * Stride;
-#pragma omp simd reduction(+:sum)
+			StartWeight += Stride;
+			#pragma omp simd reduction(+:sum)
 			for (int i = 0; i < Stride; ++i)
 			{
 				sum += WorkingMemory[i] * WorkingMemory[StartWeight + i];
 			}
 			//Output
-			WorkingMemory[Inputs + Node] = Tanh(sum);
+			WorkingMemory[Inputs+1 + Node] = ClippedIdentity(sum);
 		}
 	}
 	//Go backwards
-	for (int Node = 0; Node < Nodes - 1; ++Node)
+	for (int Node = 0; Node < Nodes; ++Node)
 	{
 		Outputs[Node] = WorkingMemory[Stride - (Node + 1)];
 	}
@@ -143,7 +150,7 @@ std::vector<float> NeuralBrain<Inputs, Nodes>::Update(std::vector<float> const &
 template<int Inputs, int Nodes>
 void NeuralBrain<Inputs, Nodes>::Randomise(float random)
 {
-	for (int i = 1; i <= RandomParam.size(); ++i)
+	for (int i = 1; i <= Nodes; ++i)
 	{
 		//RandomParam[i] *= (((std::rand() / (float)RAND_MAX)-1)/2.0);
 		for (int w = 0; w < Stride; ++w)
